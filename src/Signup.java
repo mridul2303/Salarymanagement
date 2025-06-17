@@ -3,6 +3,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.FileWriter;
 
 class Form extends Frame implements ActionListener {
 
@@ -28,9 +29,20 @@ class Form extends Frame implements ActionListener {
         });
     }
     public void actionPerformed(ActionEvent e){
-        String user = t1.getText();
-        String pass = t2.getText();
-        new Login(user,pass);
-        dispose();
+        String username = t1.getText();
+        String password = t2.getText();
+
+        try {
+            FileWriter fw = new FileWriter("users.txt", true);
+            fw.write(username + "," + password + "\n");
+            fw.close();
+
+            System.out.println("Registered Successfully!");
+            new Login();
+            dispose();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
     }
 }

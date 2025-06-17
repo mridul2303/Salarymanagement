@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 class Login extends Frame implements ActionListener {
     Label username = new Label("username");
@@ -10,11 +12,8 @@ class Login extends Frame implements ActionListener {
     TextField t3= new TextField(15);
 
     Button login = new Button("Login");
-    String saveduser, savedpass;
 
-    Login(String user, String pass){
-        saveduser = user;
-        savedpass = pass;
+    Login(){
         add(username);add(t1);add(password);t2.setEchoChar('*');add(t2);
         add(login);add(t3);
         setLayout(new FlowLayout());
@@ -24,11 +23,35 @@ class Login extends Frame implements ActionListener {
 
     }
     public void actionPerformed(ActionEvent e){
-if (t1.getText().equals(saveduser) && t2.getText().equals(savedpass)){
+        String username = t1.getText();
+        String password = t2.getText();
+        boolean found = false;
 
-}
-else {
-    t3.setText("❌ Invalid username or password.");
-}
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("users.txt"));
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts[0].equals(username) && parts[1].equals(password)) {
+                    found = true;
+                    break;
+                }
+            }
+            br.close();
+
+
+            if (found) {
+                System.out.println("Login Successful!");
+                new Dashboard(username); // Pass username to dashboard
+                dispose();
+            } else {
+               t3.setText("Invalid credentials!");
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
     }
+
 }
