@@ -5,14 +5,14 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.FileWriter;
 
-class Form extends Frame implements ActionListener {
+class Signup extends Frame implements ActionListener {
 
     Label username = new Label("username");
     TextField t1 = new TextField(15);
     Label password = new Label("password");
     TextField t2= new TextField(15);
     Button set = new Button("Set username and password");
-    Form()
+    Signup()
     {
         add(username);add(t1);add(password);add(t2);
         add(set);

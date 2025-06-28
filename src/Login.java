@@ -39,10 +39,9 @@ class Login extends Frame implements ActionListener {
             }
             br.close();
 
-
             if (found) {
                 System.out.println("Login Successful!");
-                new Dashboard(username); // Pass username to dashboard
+                new Dashboard(); // Pass username to dashboard
                 dispose();
             } else {
                t3.setText("Invalid credentials!");
