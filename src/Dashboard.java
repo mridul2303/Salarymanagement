@@ -80,23 +80,28 @@ fixedexp4.addActionListener(this);tempExp4.addActionListener(this);
     public void actionPerformed (ActionEvent e){
         Object o = e.getSource();
         if (o==fixedincome1){
-            System.out.println("hello");
+            new AddFixedIncome();
+            dispose();
         }
         if (o==tempincome1){
-            System.out.println("hello");
+            new AddtempIncome();
+            dispose();
         }
+        // to view income
         if (o==fixedincome2){
-            System.out.println("hello");
+
         }
         if (o==tempincome2){
             System.out.println("hello");
         }
+        //to add exp
         if (o==tempExp3){
             System.out.println("hello");
         }
         if (o==fixedexp3){
             System.out.println("hello");
         }
+        //to view exp
         if (o==tempExp4){
             System.out.println("hello");
         }
