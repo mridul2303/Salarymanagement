@@ -39,7 +39,7 @@ class Dashboard extends Frame implements ActionListener, MouseListener {
         add(addincome); add(popupMenu1); popupMenu1.add(fixedincome1);popupMenu1.add(tempincome1);
         //view income
         add(viewincome);add(popupMenu2);popupMenu2.add(fixedincome2);popupMenu2.add(tempincome2);
-        //add exmp
+        //add exp
         add(addexpense);add(popupMenu3);popupMenu3.add(fixedexp3);popupMenu3.add(tempExp3);
         //view exp
         add(viewexpense);add(popupMenu4);popupMenu4.add(fixedexp4);popupMenu4.add(tempExp4);
@@ -84,12 +84,12 @@ fixedexp4.addActionListener(this);tempExp4.addActionListener(this);
             dispose();
         }
         if (o==tempincome1){
-            new AddtempIncome();
+            new AddTempIncome();
             dispose();
         }
         // to view income
         if (o==fixedincome2){
-
+            new ViewFixedIncome();
         }
         if (o==tempincome2){
             System.out.println("hello");

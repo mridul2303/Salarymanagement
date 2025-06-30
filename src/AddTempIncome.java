@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileWriter;
 
-public class AddFixedIncome extends Frame implements ActionListener {
+public class AddTempIncome extends Frame implements ActionListener {
     Label source = new Label("Source");
     Label amount = new Label("Amount");
     Label date = new Label("Enter Date (yyyy-MM-dd):");
@@ -16,7 +16,7 @@ public class AddFixedIncome extends Frame implements ActionListener {
     Button addincome = new Button("Add Income");
     Button back = new Button("← Back");
 
-    AddFixedIncome() {
+    AddTempIncome() {
         setSize(500, 400);
         setVisible(true);
         setLayout(new FlowLayout());
@@ -38,8 +38,8 @@ public class AddFixedIncome extends Frame implements ActionListener {
         Object o = e.getSource();
         if (o == addincome) {
             try (FileWriter fw = new FileWriter("income.txt", true)) {
-                fw.write("Fixed," + a.getText() + "," + s.getText() + "," + d.getText() + "\n");
-                JOptionPane.showMessageDialog(null, "Fixed income added successfully!");
+                fw.write("Temp," + a.getText() + "," + s.getText() + "," + d.getText() + "\n");
+                JOptionPane.showMessageDialog(null, "Temprory income added successfully!");
                 s.setText("");
                 a.setText("");
                 d.setText("");

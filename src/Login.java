@@ -8,49 +8,66 @@ class Login extends Frame implements ActionListener {
     Label username = new Label("username");
     TextField t1 = new TextField(15);//for username
     Label password = new Label("password");
-    TextField t2= new TextField(15);//for password
-    TextField t3= new TextField(15);
+    TextField t2 = new TextField(15);//for password
+    TextField t3 = new TextField(15);
 
     Button login = new Button("Login");
+    Button back = new Button("← Back");
 
-    Login(){
-        add(username);add(t1);add(password);t2.setEchoChar('*');add(t2);
-        add(login);add(t3);
+    Login() {
+        add(username);
+        add(t1);
+        add(password);
+        t2.setEchoChar('*');
+        add(t2);
+        add(login);
+        add(t3);
+        add(back);
         setLayout(new FlowLayout());
         setVisible(true);
-        setSize(500,400);
+        setSize(500, 400);
         login.addActionListener(this);
+        back.addActionListener(this);
 
     }
-    public void actionPerformed(ActionEvent e){
+
+    public void actionPerformed(ActionEvent e) {
+        Object o = e.getSource();
         String username = t1.getText();
         String password = t2.getText();
         boolean found = false;
 
-        try {
-            BufferedReader br = new BufferedReader(new FileReader("users.txt"));
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts[0].equals(username) && parts[1].equals(password)) {
-                    found = true;
-                    break;
+
+        if (o == login) {
+            try {
+                BufferedReader br = new BufferedReader(new FileReader("users.txt"));
+                String line;
+                while ((line = br.readLine()) != null) {
+                    String[] parts = line.split(",");
+                    if (parts[0].equals(username) && parts[1].equals(password)) {
+                        found = true;
+                        break;
+                    }
                 }
-            }
-            br.close();
+                br.close();
 
-            if (found) {
-                System.out.println("Login Successful!");
-                new Dashboard(); // Pass username to dashboard
-                dispose();
-            } else {
-               t3.setText("Invalid credentials!");
+                if (found) {
+                    System.out.println("Login Successful!");
+                    new Dashboard(); // Pass username to dashboard
+                    dispose();
+                } else {
+                    t3.setText("Invalid credentials!");
+                }
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        }
+        if (o==back){
+            new Firstpage();
+            dispose();
         }
 
     }
-
 }
