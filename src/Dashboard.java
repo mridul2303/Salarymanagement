@@ -92,14 +92,14 @@ fixedexp4.addActionListener(this);tempExp4.addActionListener(this);
             new ViewFixedIncome();
         }
         if (o==tempincome2){
-            System.out.println("hello");
+            new ViewTempIncome();
         }
         //to add exp
         if (o==tempExp3){
-            System.out.println("hello");
+
         }
         if (o==fixedexp3){
-            System.out.println("hello");
+            new AddFixedExp();
         }
         //to view exp
         if (o==tempExp4){
