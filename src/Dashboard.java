@@ -106,7 +106,7 @@ fixedexp4.addActionListener(this);tempExp4.addActionListener(this);
             System.out.println("hello");
         }
         if (o==fixedexp4){
-            System.out.println("hello");
+            new ViewFixedExp();
         }
     }
 }
