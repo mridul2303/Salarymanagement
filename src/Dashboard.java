@@ -103,7 +103,7 @@ fixedexp4.addActionListener(this);tempExp4.addActionListener(this);
         }
         //to view exp
         if (o==tempExp4){
-            System.out.println("hello");
+            new ViewTempExp();
         }
         if (o==fixedexp4){
             new ViewFixedExp();
