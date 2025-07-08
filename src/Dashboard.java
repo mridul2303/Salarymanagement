@@ -1,8 +1,5 @@
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 
 class Dashboard extends Frame implements ActionListener, MouseListener {
 
@@ -53,6 +50,12 @@ fixedincome1.addActionListener(this);tempincome1.addActionListener(this);
 fixedincome2.addActionListener(this);tempincome2.addActionListener(this);
 fixedexp3.addActionListener(this);tempExp3.addActionListener(this);
 fixedexp4.addActionListener(this);tempExp4.addActionListener(this);
+
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                dispose(); // or System.exit(0);
+            }
+        });
     }
 
     public void mouseClicked (MouseEvent e){
@@ -71,10 +74,14 @@ fixedexp4.addActionListener(this);tempExp4.addActionListener(this);
         }
     }
 
+
+
     public void mousePressed(MouseEvent e) {}
     public void mouseReleased(MouseEvent e) {}
     public void mouseEntered(MouseEvent e) {}
     public void mouseExited(MouseEvent e) {}
+
+
 
     //task if clicked
     public void actionPerformed (ActionEvent e){

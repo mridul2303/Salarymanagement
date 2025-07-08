@@ -1,16 +1,18 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
 public class ViewTempExp extends Frame implements ActionListener {
     TextArea area = new TextArea(20, 50);
-    Button load = new Button("Load Fixed Income");
+    Button load = new Button("Load Temprory Expense");
     Button back = new Button("← Back");
 
     ViewTempExp() {
-        setTitle("View Fixed Income");
+        setTitle("View Temprory Expense");
         setSize(600, 500);
         setLayout(new FlowLayout());
 
@@ -22,6 +24,12 @@ public class ViewTempExp extends Frame implements ActionListener {
         back.addActionListener(this);
 
         setVisible(true);
+
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                dispose(); // or System.exit(0);
+            }
+        });
     }
 
     public void actionPerformed(ActionEvent e) {
