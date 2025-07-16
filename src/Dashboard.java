@@ -3,8 +3,8 @@ import java.awt.event.*;
 
 class Dashboard extends Frame implements ActionListener, MouseListener {
 
-    Label addincome = new Label("Add Income");
-    Label viewincome = new Label("view Income");
+    Label addIncome = new Label("Add Income");
+    Label viewIncome = new Label("view Income");
     Label addexpense = new Label("Add Expense");
     Label viewexpense = new Label("view Expense");
 
@@ -33,16 +33,16 @@ class Dashboard extends Frame implements ActionListener, MouseListener {
         setLayout(new FlowLayout());
 
         //add income
-        add(addincome); add(popupMenu1); popupMenu1.add(fixedincome1);popupMenu1.add(tempincome1);
+        add(addIncome); add(popupMenu1); popupMenu1.add(fixedincome1);popupMenu1.add(tempincome1);
         //view income
-        add(viewincome);add(popupMenu2);popupMenu2.add(fixedincome2);popupMenu2.add(tempincome2);
+        add(viewIncome);add(popupMenu2);popupMenu2.add(fixedincome2);popupMenu2.add(tempincome2);
         //add exp
         add(addexpense);add(popupMenu3);popupMenu3.add(fixedexp3);popupMenu3.add(tempExp3);
         //view exp
         add(viewexpense);add(popupMenu4);popupMenu4.add(fixedexp4);popupMenu4.add(tempExp4);
 
-        addincome.addMouseListener(this);
-        viewincome.addMouseListener(this);
+        addIncome.addMouseListener(this);
+        viewIncome.addMouseListener(this);
         addexpense.addMouseListener(this);
         viewexpense.addMouseListener(this);
 
@@ -60,11 +60,11 @@ fixedexp4.addActionListener(this);tempExp4.addActionListener(this);
 
     public void mouseClicked (MouseEvent e){
         Object o = e.getSource();
-        if (o==addincome){
-            popupMenu1.show(addincome,0,addincome.getHeight());
+        if (o== addIncome){
+            popupMenu1.show(addIncome,0, addIncome.getHeight());
         }
-        if (o==viewincome){
-            popupMenu2.show(viewincome,0,viewincome.getHeight());
+        if (o== viewIncome){
+            popupMenu2.show(viewIncome,0, viewIncome.getHeight());
         }
         if (o==addexpense){
             popupMenu3.show(addexpense,0,addexpense.getHeight());

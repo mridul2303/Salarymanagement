@@ -1,80 +1,135 @@
+import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.awt.event.*;
+import java.io.*;
 
-class Signup extends Frame implements ActionListener {
+public class Signup extends JFrame implements ActionListener {
 
-    Label username = new Label("username");
-    TextField t1 = new TextField(15);
-    Label password = new Label("password");
-    TextField t2 = new TextField(15);
-    Button set = new Button("Set username and password");
-    Button back = new Button("← Back");
+    JLabel usernameLabel = new JLabel("Username:");
+    JTextField usernameField = new JTextField(20);
 
-    Signup() {
-        add(username); add(t1);
-        add(password); add(t2);
-        add(set);
-        add(back);
-        setLayout(new FlowLayout());
-        setVisible(true);
-        setSize(500, 400);
+    JLabel passwordLabel = new JLabel("Password:");
+    JPasswordField passwordField = new JPasswordField(20);
 
-        set.addActionListener(this);
-        back.addActionListener(this);
+    JButton setButton = new JButton("Set Username and Password");
+    JButton backButton = new JButton("← Back");
+
+    JLabel messageLabel = new JLabel("");
+
+    public Signup() {
+        setTitle("Signup Page");
+        setSize(450, 300);
+        setLocationRelativeTo(null); // center
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        setLayout(new GridBagLayout());
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+
+        messageLabel.setForeground(Color.RED);
+
+        // Username Label
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.EAST;
+        add(usernameLabel, gbc);
+
+        // Username Field
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.WEST;
+        add(usernameField, gbc);
+
+        // Password Label
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.anchor = GridBagConstraints.EAST;
+        add(passwordLabel, gbc);
+
+        // Password Field
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.WEST;
+        add(passwordField, gbc);
+
+        // Message Label
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        add(messageLabel, gbc);
+
+        // Set Button
+        gbc.gridy = 3;
+        gbc.gridwidth = 2;
+        add(setButton, gbc);
+
+        // Back Button
+        gbc.gridy = 4;
+        add(backButton, gbc);
+
+        // Listeners
+        setButton.addActionListener(this);
+        backButton.addActionListener(this);
 
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
-                dispose();
+                int confirm = JOptionPane.showConfirmDialog(
+                        Signup.this,
+                        "Are you sure you want to exit?",
+                        "Exit Confirmation",
+                        JOptionPane.YES_NO_OPTION
+                );
+                if (confirm == JOptionPane.YES_OPTION) {
+                    dispose();
+                }
             }
         });
+
+        setVisible(true);
     }
 
     public void actionPerformed(ActionEvent e) {
-        Object o = e.getSource();
-        String username = t1.getText().trim();
-        String password = t2.getText().trim();
+        String username = usernameField.getText().trim();
+        String password = new String(passwordField.getPassword()).trim();
 
-        if (o == set) {
+        if (e.getSource() == setButton) {
             if (username.isEmpty() || password.isEmpty()) {
-                System.out.println("Username or password cannot be empty.");
+                messageLabel.setText("Username or password cannot be empty.");
                 return;
             }
 
             try {
-                // Check if username already exists
                 BufferedReader br = new BufferedReader(new FileReader("users.txt"));
                 String line;
                 while ((line = br.readLine()) != null) {
                     String[] parts = line.split(",");
                     if (parts.length > 0 && parts[0].equals(username)) {
-                        System.out.println("Username already exists. Choose another.");
+                        messageLabel.setText("Username already exists!");
                         br.close();
                         return;
                     }
                 }
                 br.close();
 
-                // If not exists, write to file
                 FileWriter fw = new FileWriter("users.txt", true);
                 fw.write(username + "," + password + "\n");
                 fw.close();
 
-                System.out.println("Registered Successfully!");
-                new Login();
+                JOptionPane.showMessageDialog(this, "Registered Successfully!");
+                new Login(); // You must have Login class
                 dispose();
 
-            } catch (Exception ex) {
+            } catch (IOException ex) {
                 ex.printStackTrace();
+                messageLabel.setText("Error while writing data.");
             }
-        } else if (o==back) {
-new Firstpage();
-dispose();
+
+        } else if (e.getSource() == backButton) {
+            new Firstpage(); // You must have Firstpage class
+            dispose();
         }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(Signup::new);
     }
 }
