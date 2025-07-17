@@ -3,56 +3,78 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.FileWriter;
 
-public class AddTempExp extends Frame implements ActionListener {
+public class AddTempExp extends JFrame implements ActionListener {
 
-    // UI Components
-    Label amountLabel = new Label("Amount");
-    Label dateLabel = new Label("Date");
-    Label expenseTypeLabel = new Label("Expense Type");
+    JLabel expenseTypeLabel = new JLabel("Expense Type:");
+    JLabel amountLabel = new JLabel("Amount:");
+    JLabel dateLabel = new JLabel("Enter Date (yyyy-MM-dd):");
 
-    TextField amountField = new TextField(15);
-    TextField dateField = new TextField(15);
-    TextField expenseTypeField = new TextField(15);
+    JTextField expenseTypeField = new JTextField(15);
+    JTextField amountField = new JTextField(15);
+    JTextField dateField = new JTextField(15);
 
-    Button addButton = new Button("Add Expense");
-    Button backButton = new Button("← Back");
+    JButton addButton = new JButton("Add Expense");
+    JButton backButton = new JButton("← Back");
 
-    // Constructor
     public AddTempExp() {
         setTitle("Add Temporary Expense");
-        setSize(444, 555);
-        setLayout(new FlowLayout());
-        setVisible(true);
+        setSize(500, 400);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
-        // Adding components
-        add(expenseTypeLabel);
-        add(expenseTypeField);
-        add(amountLabel);
-        add(amountField);
-        add(dateLabel);
-        add(dateField);
-        add(addButton);
-        add(backButton);
+        setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Event Listeners
+        // Row 0 - Expense Type
+        gbc.gridx = 0; gbc.gridy = 0;
+        add(expenseTypeLabel, gbc);
+        gbc.gridx = 1;
+        add(expenseTypeField, gbc);
+
+        // Row 1 - Amount
+        gbc.gridx = 0; gbc.gridy = 1;
+        add(amountLabel, gbc);
+        gbc.gridx = 1;
+        add(amountField, gbc);
+
+        // Row 2 - Date
+        gbc.gridx = 0; gbc.gridy = 2;
+        add(dateLabel, gbc);
+        gbc.gridx = 1;
+        add(dateField, gbc);
+
+        // Row 3 - Buttons
+        gbc.gridx = 0; gbc.gridy = 3;
+        add(backButton, gbc);
+        gbc.gridx = 1;
+        add(addButton, gbc);
+
         addButton.addActionListener(this);
         backButton.addActionListener(this);
 
-        // Handle window close
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
-                dispose(); // Closes only this window
+                int result = JOptionPane.showConfirmDialog(null,
+                        "Are you sure you want to exit?",
+                        "Exit Confirmation",
+                        JOptionPane.YES_NO_OPTION);
+                if (result == JOptionPane.YES_OPTION) {
+                    dispose();
+                }
             }
         });
+
+        setVisible(true);
     }
 
-    // Action Handling
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
 
         if (source == backButton) {
-            new Dashboard();  // Go back to dashboard
-            dispose();        // Close current window
+            new Dashboard();
+            dispose();
         }
 
         if (source == addButton) {
@@ -72,5 +94,9 @@ public class AddTempExp extends Frame implements ActionListener {
                 JOptionPane.showMessageDialog(null, "Error saving data.");
             }
         }
+    }
+
+    public static void main(String[] args) {
+        new AddTempExp();
     }
 }

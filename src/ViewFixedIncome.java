@@ -1,47 +1,71 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
-public class ViewFixedIncome extends Frame implements ActionListener {
-    TextArea area = new TextArea(20, 50);
-    Button load = new Button("Load Fixed Income");
-    Button back = new Button("← Back");
+public class ViewFixedIncome extends JFrame implements ActionListener {
+    JTextArea area = new JTextArea(20, 50);
+    JButton load = new JButton("Load Fixed Income");
+    JButton back = new JButton("← Back");
 
-    ViewFixedIncome() {
+    public ViewFixedIncome() {
         setTitle("View Fixed Income");
-        setSize(600, 500);
-        setLayout(new FlowLayout());
+        setSize(650, 550);
+        setLocationRelativeTo(null); // center the window
+        setLayout(new GridBagLayout());
 
-        add(load);
-        add(area);
-        add(back);
+        JScrollPane scrollPane = new JScrollPane(area);
+        area.setEditable(false);
+        area.setFont(new Font("Monospaced", Font.PLAIN, 13));
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10); // margin around components
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        add(load, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+        add(scrollPane, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.weightx = 0;
+        gbc.weighty = 0;
+        add(back, gbc);
 
         load.addActionListener(this);
         back.addActionListener(this);
 
-        setVisible(true);
-
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
-                dispose(); // or System.exit(0);
+                dispose();
             }
         });
+
+        setVisible(true);
     }
 
     public void actionPerformed(ActionEvent e) {
         Object o = e.getSource();
         if (o == load) {
-            area.setText(""); // clear previous content
+            area.setText("");
             try (BufferedReader br = new BufferedReader(new FileReader("income.txt"))) {
                 String line;
                 int count = 1;
                 area.append("S.No\tAmount\tSource\tDate\n");
-                area.append("----------------------------------------\n");
+                area.append("---------------------------------------------\n");
                 while ((line = br.readLine()) != null) {
                     String[] parts = line.split(",");
                     if (parts.length == 4 && parts[0].equalsIgnoreCase("Fixed")) {
@@ -57,7 +81,8 @@ public class ViewFixedIncome extends Frame implements ActionListener {
                 area.setText("Error reading income.txt");
             }
         }
-        if (o==back){
+
+        if (o == back) {
             new Dashboard();
             dispose();
         }

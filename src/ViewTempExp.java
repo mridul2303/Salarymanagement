@@ -1,35 +1,56 @@
+import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
-public class ViewTempExp extends Frame implements ActionListener {
-    TextArea area = new TextArea(20, 50);
-    Button load = new Button("Load Temprory Expense");
-    Button back = new Button("← Back");
+public class ViewTempExp extends JFrame implements ActionListener {
+    JTextArea area = new JTextArea(20, 50);
+    JButton load = new JButton("Load Temporary Expense");
+    JButton back = new JButton("← Back");
 
-    ViewTempExp() {
-        setTitle("View Temprory Expense");
-        setSize(600, 500);
-        setLayout(new FlowLayout());
+    public ViewTempExp() {
+        setTitle("View Temporary Expenses");
+        setSize(700, 600);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        setLocationRelativeTo(null); // center the frame
 
-        add(load);
-        add(area);
-        add(back);
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        area.setEditable(false);
+        area.setFont(new Font("Monospaced", Font.PLAIN, 14));
+        JScrollPane scrollPane = new JScrollPane(area);
+
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        panel.add(load, gbc);
+
+        gbc.gridy = 1;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        panel.add(scrollPane, gbc);
+
+        gbc.gridy = 2;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.weighty = 0;
+        panel.add(back, gbc);
 
         load.addActionListener(this);
         back.addActionListener(this);
-
-        setVisible(true);
 
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 dispose(); // or System.exit(0);
             }
         });
+
+        add(panel);
+        setVisible(true);
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -49,16 +70,20 @@ public class ViewTempExp extends Frame implements ActionListener {
                     }
                 }
                 if (count == 1) {
-                    area.append("No temprory expense records found.\n");
+                    area.append("No temporary expense records found.\n");
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
                 area.setText("Error reading expense.txt");
             }
         }
-        if (o==back){
+        if (o == back) {
             new Dashboard();
             dispose();
         }
+    }
+
+    public static void main(String[] args) {
+        new ViewTempExp();
     }
 }
