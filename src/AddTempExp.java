@@ -1,53 +1,72 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.io.FileWriter;
 
 public class AddTempExp extends Frame implements ActionListener {
-    Label amount = new Label("Amount");
-    Label date = new Label("Date");
-    Label expenseHead = new Label("Expense Type");
 
-    TextField a = new TextField(15);
-    TextField d = new TextField(15);
-    TextField et = new TextField(15);
+    // UI Components
+    Label amountLabel = new Label("Amount");
+    Label dateLabel = new Label("Date");
+    Label expenseTypeLabel = new Label("Expense Type");
 
-    Button add = new Button("Add Expense");
-    Button back = new Button("← Back");
+    TextField amountField = new TextField(15);
+    TextField dateField = new TextField(15);
+    TextField expenseTypeField = new TextField(15);
 
-    AddTempExp(){
-        setSize(444,555);
+    Button addButton = new Button("Add Expense");
+    Button backButton = new Button("← Back");
+
+    // Constructor
+    public AddTempExp() {
+        setTitle("Add Temporary Expense");
+        setSize(444, 555);
         setLayout(new FlowLayout());
         setVisible(true);
 
-        add(expenseHead);add(et);add(amount);add(a);add(date);add(d);
-        add(add);add(back);
-        add.addActionListener(this);
-        back.addActionListener(this);
+        // Adding components
+        add(expenseTypeLabel);
+        add(expenseTypeField);
+        add(amountLabel);
+        add(amountField);
+        add(dateLabel);
+        add(dateField);
+        add(addButton);
+        add(backButton);
 
+        // Event Listeners
+        addButton.addActionListener(this);
+        backButton.addActionListener(this);
+
+        // Handle window close
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
-                dispose(); // or System.exit(0);
+                dispose(); // Closes only this window
             }
         });
-
     }
-    public void actionPerformed (ActionEvent e){
-        Object o = e.getSource();
-        if (o==back){
-            new Dashboard();
-            dispose();
+
+    // Action Handling
+    public void actionPerformed(ActionEvent e) {
+        Object source = e.getSource();
+
+        if (source == backButton) {
+            new Dashboard();  // Go back to dashboard
+            dispose();        // Close current window
         }
-        if (o==add){
+
+        if (source == addButton) {
             try (FileWriter fw = new FileWriter("expense.txt", true)) {
-                fw.write("Temp," + a.getText() + "," + et.getText() + "," + d.getText() + "\n");
-                JOptionPane.showMessageDialog(null, "Temp Expense added successfully!");
-                et.setText("");
-                a.setText("");
-                d.setText("");
+                fw.write("Temp," + amountField.getText() + "," +
+                        expenseTypeField.getText() + "," +
+                        dateField.getText() + "\n");
+
+                JOptionPane.showMessageDialog(null, "Temporary Expense added successfully!");
+
+                // Clear fields
+                expenseTypeField.setText("");
+                amountField.setText("");
+                dateField.setText("");
             } catch (Exception ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Error saving data.");

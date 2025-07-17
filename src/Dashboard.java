@@ -1,119 +1,148 @@
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-class Dashboard extends Frame implements ActionListener, MouseListener {
+public class Dashboard extends JFrame implements ActionListener, MouseListener {
 
-    Label addIncome = new Label("Add Income");
-    Label viewIncome = new Label("view Income");
-    Label addexpense = new Label("Add Expense");
-    Label viewexpense = new Label("view Expense");
+    JLabel addIncome = new JLabel("➕ Add Income");
+    JLabel viewIncome = new JLabel("📄 View Income");
+    JLabel addExpense = new JLabel("➖ Add Expense");
+    JLabel viewExpense = new JLabel("📊 View Expense");
 
-    PopupMenu popupMenu1 = new PopupMenu();//add income
-    MenuItem fixedincome1 = new MenuItem("add Fix Income");
-    MenuItem tempincome1 = new MenuItem("add Temprory Income");
+    // Popup menus
+    JPopupMenu popupIncomeAdd = new JPopupMenu();
+    JMenuItem fixedIncomeAdd = new JMenuItem("Add Fixed Income");
+    JMenuItem tempIncomeAdd = new JMenuItem("Add Temporary Income");
 
-    PopupMenu popupMenu2 = new PopupMenu();//view income
-    MenuItem fixedincome2 = new MenuItem("view Fix Income");
-    MenuItem tempincome2 = new MenuItem("view Temprory Income");
+    JPopupMenu popupIncomeView = new JPopupMenu();
+    JMenuItem fixedIncomeView = new JMenuItem("View Fixed Income");
+    JMenuItem tempIncomeView = new JMenuItem("View Temporary Income");
 
-    PopupMenu popupMenu3 = new PopupMenu();//add exp
-    MenuItem tempExp3 = new MenuItem("add Temprory Expense");
-    MenuItem fixedexp3 = new MenuItem("add Fix Expense");
+    JPopupMenu popupExpenseAdd = new JPopupMenu();
+    JMenuItem fixedExpenseAdd = new JMenuItem("Add Fixed Expense");
+    JMenuItem tempExpenseAdd = new JMenuItem("Add Temporary Expense");
 
-    PopupMenu popupMenu4 = new PopupMenu();//view exp
-    MenuItem tempExp4 = new MenuItem("View Temprory Expense");
-    MenuItem fixedexp4 = new MenuItem("View Fix Expense");
+    JPopupMenu popupExpenseView = new JPopupMenu();
+    JMenuItem fixedExpenseView = new JMenuItem("View Fixed Expense");
+    JMenuItem tempExpenseView = new JMenuItem("View Temporary Expense");
 
+    public Dashboard() {
+        setTitle("Dashboard");
+        setSize(500, 400);
+        setLocationRelativeTo(null); // Center screen
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
-
-
-    Dashboard(){
-        setVisible(true);
-        setSize(400,500);
-        setLayout(new FlowLayout());
-
-        //add income
-        add(addIncome); add(popupMenu1); popupMenu1.add(fixedincome1);popupMenu1.add(tempincome1);
-        //view income
-        add(viewIncome);add(popupMenu2);popupMenu2.add(fixedincome2);popupMenu2.add(tempincome2);
-        //add exp
-        add(addexpense);add(popupMenu3);popupMenu3.add(fixedexp3);popupMenu3.add(tempExp3);
-        //view exp
-        add(viewexpense);add(popupMenu4);popupMenu4.add(fixedexp4);popupMenu4.add(tempExp4);
-
-        addIncome.addMouseListener(this);
-        viewIncome.addMouseListener(this);
-        addexpense.addMouseListener(this);
-        viewexpense.addMouseListener(this);
-
-fixedincome1.addActionListener(this);tempincome1.addActionListener(this);
-fixedincome2.addActionListener(this);tempincome2.addActionListener(this);
-fixedexp3.addActionListener(this);tempExp3.addActionListener(this);
-fixedexp4.addActionListener(this);tempExp4.addActionListener(this);
-
+        // Custom close handler
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
-                dispose(); // or System.exit(0);
+                int result = JOptionPane.showConfirmDialog(
+                        Dashboard.this,
+                        "Are you sure you want to exit?",
+                        "Exit Confirmation",
+                        JOptionPane.YES_NO_OPTION
+                );
+                if (result == JOptionPane.YES_OPTION) {
+                    dispose(); // Or System.exit(0)
+                }
             }
         });
+
+        setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(15, 15, 15, 15);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        // Add labels
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        add(addIncome, gbc);
+
+        gbc.gridy = 1;
+        add(viewIncome, gbc);
+
+        gbc.gridy = 2;
+        add(addExpense, gbc);
+
+        gbc.gridy = 3;
+        add(viewExpense, gbc);
+
+        // Add MouseListener
+        addIncome.addMouseListener(this);
+        viewIncome.addMouseListener(this);
+        addExpense.addMouseListener(this);
+        viewExpense.addMouseListener(this);
+
+        // Attach menu items
+        popupIncomeAdd.add(fixedIncomeAdd);
+        popupIncomeAdd.add(tempIncomeAdd);
+
+        popupIncomeView.add(fixedIncomeView);
+        popupIncomeView.add(tempIncomeView);
+
+        popupExpenseAdd.add(fixedExpenseAdd);
+        popupExpenseAdd.add(tempExpenseAdd);
+
+        popupExpenseView.add(fixedExpenseView);
+        popupExpenseView.add(tempExpenseView);
+
+        // Add ActionListeners
+        fixedIncomeAdd.addActionListener(this);
+        tempIncomeAdd.addActionListener(this);
+        fixedIncomeView.addActionListener(this);
+        tempIncomeView.addActionListener(this);
+        fixedExpenseAdd.addActionListener(this);
+        tempExpenseAdd.addActionListener(this);
+        fixedExpenseView.addActionListener(this);
+        tempExpenseView.addActionListener(this);
+
+        setVisible(true);
     }
 
-    public void mouseClicked (MouseEvent e){
-        Object o = e.getSource();
-        if (o== addIncome){
-            popupMenu1.show(addIncome,0, addIncome.getHeight());
-        }
-        if (o== viewIncome){
-            popupMenu2.show(viewIncome,0, viewIncome.getHeight());
-        }
-        if (o==addexpense){
-            popupMenu3.show(addexpense,0,addexpense.getHeight());
-        }
-        if (o==viewexpense){
-            popupMenu4.show(viewexpense,0,viewexpense.getHeight());
+    // Show popup menus when labels are clicked
+    public void mouseClicked(MouseEvent e) {
+        Object source = e.getSource();
+        if (source == addIncome) {
+            popupIncomeAdd.show(addIncome, 0, addIncome.getHeight());
+        } else if (source == viewIncome) {
+            popupIncomeView.show(viewIncome, 0, viewIncome.getHeight());
+        } else if (source == addExpense) {
+            popupExpenseAdd.show(addExpense, 0, addExpense.getHeight());
+        } else if (source == viewExpense) {
+            popupExpenseView.show(viewExpense, 0, viewExpense.getHeight());
         }
     }
 
-
-
+    // Required MouseListener methods
     public void mousePressed(MouseEvent e) {}
     public void mouseReleased(MouseEvent e) {}
-    public void mouseEntered(MouseEvent e) {}
-    public void mouseExited(MouseEvent e) {}
+    public void mouseEntered(MouseEvent e) {
+        ((JLabel)e.getSource()).setForeground(Color.BLUE);
+    }
+    public void mouseExited(MouseEvent e) {
+        ((JLabel)e.getSource()).setForeground(Color.BLACK);
+    }
 
-
-
-    //task if clicked
-    public void actionPerformed (ActionEvent e){
+    // Action handlers
+    public void actionPerformed(ActionEvent e) {
         Object o = e.getSource();
-        if (o==fixedincome1){
+        if (o == fixedIncomeAdd) {
             new AddFixedIncome();
             dispose();
-        }
-        if (o==tempincome1){
+        } else if (o == tempIncomeAdd) {
             new AddTempIncome();
             dispose();
-        }
-        // to view income
-        if (o==fixedincome2){
+        } else if (o == fixedIncomeView) {
             new ViewFixedIncome();
-        }
-        if (o==tempincome2){
+        } else if (o == tempIncomeView) {
             new ViewTempIncome();
-        }
-        //to add exp
-        if (o==tempExp3){
-
-        }
-        if (o==fixedexp3){
+        } else if (o == fixedExpenseAdd) {
             new AddFixedExp();
-        }
-        //to view exp
-        if (o==tempExp4){
-            new ViewTempExp();
-        }
-        if (o==fixedexp4){
+        } else if (o == tempExpenseAdd) {
+            new AddTempExp();
+        } else if (o == fixedExpenseView) {
             new ViewFixedExp();
+        } else if (o == tempExpenseView) {
+            new ViewTempExp();
         }
     }
 }
