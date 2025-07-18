@@ -19,6 +19,8 @@ public class ViewFixedExp extends JFrame implements ActionListener {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10); // spacing
 
+        area.setFont(new Font("Monospaced", Font.PLAIN, 13));
+
         // Load Button
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -39,6 +41,7 @@ public class ViewFixedExp extends JFrame implements ActionListener {
         gbc.weighty = 1;
         JScrollPane scrollPane = new JScrollPane(area);
         add(scrollPane, gbc);
+
 
         load.addActionListener(this);
         back.addActionListener(this);
@@ -67,6 +70,7 @@ public class ViewFixedExp extends JFrame implements ActionListener {
             area.setText(""); // clear previous content
             try (BufferedReader br = new BufferedReader(new FileReader("expense.txt"))) {
                 String line;
+                Double total = 0.0;
                 int count = 1;
                 area.append("S.No\tAmount\tExpenseHead\tDate\n");
                 area.append("--------------------------------------------------------\n");
@@ -74,11 +78,16 @@ public class ViewFixedExp extends JFrame implements ActionListener {
                     String[] parts = line.split(",");
                     if (parts.length == 4 && parts[0].equalsIgnoreCase("Fixed")) {
                         area.append(count + "\t" + parts[1] + "\t" + parts[2] + "\t" + parts[3] + "\n");
-                        count++;
+                        total += Double.parseDouble(parts[1]);
+                    count++;
                     }
                 }
                 if (count == 1) {
                     area.append("No fixed expense records found.\n");
+                }
+                else {
+                    area.append("-----------------------------------------------\n");
+                    area.append("Total Fixed Expense:: "+ total+"\n");
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();

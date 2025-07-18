@@ -63,6 +63,7 @@ public class ViewFixedIncome extends JFrame implements ActionListener {
             area.setText("");
             try (BufferedReader br = new BufferedReader(new FileReader("income.txt"))) {
                 String line;
+                Double total =0.0;
                 int count = 1;
                 area.append("S.No\tAmount\tSource\tDate\n");
                 area.append("---------------------------------------------\n");
@@ -70,11 +71,16 @@ public class ViewFixedIncome extends JFrame implements ActionListener {
                     String[] parts = line.split(",");
                     if (parts.length == 4 && parts[0].equalsIgnoreCase("Fixed")) {
                         area.append(count + "\t" + parts[1] + "\t" + parts[2] + "\t" + parts[3] + "\n");
+                        total = total + Double.parseDouble(parts[1]);
                         count++;
                     }
                 }
                 if (count == 1) {
                     area.append("No fixed income records found.\n");
+                }
+                else{
+                    area.append("-----------------------------------------------\n");
+                    area.append("Total Fixed Income: " + total + "\n");
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
