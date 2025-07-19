@@ -25,6 +25,7 @@ public class Dashboard extends JFrame implements ActionListener, MouseListener {
     JPopupMenu popupExpenseView = new JPopupMenu();
     JMenuItem fixedExpenseView = new JMenuItem("View Fixed Expense");
     JMenuItem tempExpenseView = new JMenuItem("View Temporary Expense");
+    JButton accounts = new JButton("Accounts");
 
     public Dashboard() {
         setTitle("Dashboard");
@@ -66,6 +67,10 @@ public class Dashboard extends JFrame implements ActionListener, MouseListener {
         gbc.gridy = 3;
         add(viewExpense, gbc);
 
+        gbc.gridy = 4;
+        add(accounts);
+        accounts.addActionListener(this);
+
         // Add MouseListener
         addIncome.addMouseListener(this);
         viewIncome.addMouseListener(this);
@@ -94,6 +99,7 @@ public class Dashboard extends JFrame implements ActionListener, MouseListener {
         tempExpenseAdd.addActionListener(this);
         fixedExpenseView.addActionListener(this);
         tempExpenseView.addActionListener(this);
+
 
         setVisible(true);
     }
@@ -133,16 +139,26 @@ public class Dashboard extends JFrame implements ActionListener, MouseListener {
             dispose();
         } else if (o == fixedIncomeView) {
             new ViewFixedIncome();
+            dispose();
         } else if (o == tempIncomeView) {
             new ViewTempIncome();
+            dispose();
         } else if (o == fixedExpenseAdd) {
             new AddFixedExp();
+            dispose();
         } else if (o == tempExpenseAdd) {
             new AddTempExp();
+            dispose();
         } else if (o == fixedExpenseView) {
             new ViewFixedExp();
+            dispose();
         } else if (o == tempExpenseView) {
             new ViewTempExp();
+            dispose();
+        }
+        else if (o == accounts){
+            new Accounts();
+            dispose();
         }
     }
 }
