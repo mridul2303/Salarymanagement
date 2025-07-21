@@ -77,6 +77,8 @@ class Accounts extends JFrame implements ActionListener {
             dispose();
         } else if (o == load) {
             loadIncomes();
+            loadExpense();
+
         }
     }
 
@@ -124,5 +126,49 @@ class Accounts extends JFrame implements ActionListener {
             ex.printStackTrace();
             t1.setText("Error reading income.txt"+  ex.getMessage());
         }
+    }
+
+    void loadExpense(){
+t2.setText("");
+        double total = 0.0;
+
+        LocalDate today = LocalDate.now();
+        int currentDay = today.getDayOfMonth();
+        int currentMonth = today.getMonthValue();
+        int currentYear = today.getYear();
+
+        t2.append("Amount\tDate\n");
+        t2.append("--------------------------\n");
+
+        try (BufferedReader br = new BufferedReader(new FileReader("expense.txt"))){
+            String line ;
+            while ((line = br.readLine()) != null) {
+                String[] part = line.split(",");
+                String type = part[0].trim();
+                double amount = Double.parseDouble(part[1].trim());
+                LocalDate date = LocalDate.parse(part[3].trim());
+                int expenseDay = date.getDayOfMonth();
+                if (type.equalsIgnoreCase("fixed")){
+                    if (expenseDay <= currentDay) {
+                        LocalDate adjustedDate = LocalDate.of(currentYear, currentMonth, expenseDay);
+                        t2.append(amount + "\t" + adjustedDate + "\n");
+                        total += amount;
+                    }}
+                    else if (type.equalsIgnoreCase("Temp")) {
+                        if (date.getMonthValue() == currentMonth && date.getYear() == currentYear) {
+                            t2.append(amount + "\t" + date + "\n");
+                            total += amount;
+                        }
+                    }
+            }
+            t2.append("--------------------------\n");
+            t2.append("Total expense: " + total + "\n");
+
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+            t2.setText("Error reading expense.txt"+  ex.getMessage());
+        }
+
     }
 }
