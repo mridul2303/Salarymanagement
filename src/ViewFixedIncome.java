@@ -16,39 +16,45 @@ public class ViewFixedIncome extends JFrame implements ActionListener {
         setLocationRelativeTo(null);
         setLayout(new GridBagLayout());
 
-        JScrollPane scrollPane = new JScrollPane(area);
+        JScrollPane scroll = new JScrollPane(area);
         area.setEditable(false);
         area.setFont(new Font("Monospaced", Font.PLAIN, 13));
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
 
+        // Load button
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.gridwidth = 1;
+        gbc.gridwidth = 4;
+        gbc.anchor = GridBagConstraints.CENTER;
         add(load, gbc);
 
-        gbc.gridx = 1;
-        add(edit, gbc);
-
-        gbc.gridx = 2;
-        add(save, gbc);
-
+        // Text area
         gbc.gridx = 0;
         gbc.gridy = 1;
-        gbc.gridwidth = 3;
+        gbc.gridwidth = 4;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.weightx = 1;
         gbc.weighty = 1;
-        add(scrollPane, gbc);
+        add(scroll, gbc);
 
+        // Back button
         gbc.gridx = 0;
         gbc.gridy = 2;
-        gbc.gridwidth = 3;
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.weightx = 0;
-        gbc.weighty = 0;
+        gbc.gridwidth = 1;
+        gbc.anchor = GridBagConstraints.EAST;
         add(back, gbc);
+
+        // Edit button
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.CENTER;
+        add(edit, gbc);
+
+        // Save button
+        gbc.gridx = 2;
+        gbc.anchor = GridBagConstraints.WEST;
+        add(save, gbc);
 
         load.addActionListener(this);
         edit.addActionListener(this);
