@@ -15,7 +15,7 @@ public class ViewTempExp extends JFrame implements ActionListener {
         setSize(700, 600);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setLocationRelativeTo(null); // center the frame
-        
+
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
@@ -109,8 +109,8 @@ public class ViewTempExp extends JFrame implements ActionListener {
                     File original = new File("expense.txt");
                     File temproryfile = new File("temp.txt");
 
-                    BufferedReader br = new BufferedReader(new FileReader("expense.txt"));
-                    BufferedWriter bw = new BufferedWriter(new FileWriter("temp.txt"));
+                    BufferedReader br = new BufferedReader(new FileReader(original));
+                    BufferedWriter bw = new BufferedWriter(new FileWriter(temproryfile));
 
                     String line ;
                     while ((line = br.readLine())!=null){

@@ -1,1 +1,2 @@
 Fixed,20000,Flat Rent,2025-07-01
+Temp,900,cafe,2025-07-24

@@ -1,6 +1,10 @@
-fixed,80000,job,2025-07-01
-Fixed,1000,job,2025-07-01
-Fixed,90000,job,2025-07-01
+Fixed,00,job,2025-07-01
+Fixed,80000,job,2025-07-01
+Fixed,80000,job,2025-07-01
+Fixed,80000,job,2025-07-01
+Fixed,80000,job,2025-07-01
+Fixed,100000,job,2025-07-01
+Fixed,90,job,2025-07-01
 Fixed,50000,US Client,2025-07-15
-Fixed,20000,business,2025-07-05
-Temp,800,bonus,2025-07-20
+Fixed,1090,business,2025-07-05
+Temp,25000,Flat Rent,2025-07-01

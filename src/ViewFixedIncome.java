@@ -76,17 +76,21 @@ public class ViewFixedIncome extends JFrame implements ActionListener {
 
         if (o == load) {
             area.setText("");
+            area.setEditable(false);
             try (BufferedReader br = new BufferedReader(new FileReader("income.txt"))) {
                 String line;
-                Double total = 0.0;
+                double total = 0.0;
                 int count = 1;
                 area.append("S.No\tAmount\tSource\tDate\n");
                 area.append("---------------------------------------------\n");
                 while ((line = br.readLine()) != null) {
                     String[] parts = line.split(",");
-                    if (parts.length == 4 && parts[0].equalsIgnoreCase("Fixed")) {
-                        area.append(count + "\t" + parts[1] + "\t" + parts[2] + "\t" + parts[3] + "\n");
-                        total += Double.parseDouble(parts[1]);
+                    if (parts.length == 4 && parts[0].trim().equalsIgnoreCase("Fixed")) {
+                        String amount = parts[1].trim();
+                        String source = parts[2].trim();
+                        String date = parts[3].trim();
+                        area.append(count + "\t" + amount + "\t" + source + "\t" + date + "\n");
+                        total += Double.parseDouble(amount);
                         count++;
                     }
                 }
@@ -114,7 +118,7 @@ public class ViewFixedIncome extends JFrame implements ActionListener {
             }
 
             try {
-                String[] lines = area.getText().split("\\R");
+                String[] lines = area.getText().split("\\R"); // \R matches all line breaks
                 File original = new File("income.txt");
                 File temp = new File("temp_income.txt");
 
@@ -130,13 +134,13 @@ public class ViewFixedIncome extends JFrame implements ActionListener {
                     }
                 }
 
-                // Write edited Fixed lines
-                for (int i = 2; i < lines.length; i++) { // Skip headers
+                // Write edited Fixed lines (skip headers and totals)
+                for (int i = 2; i < lines.length; i++) {
                     String l = lines[i].trim();
-                    if (l.isEmpty() || l.startsWith("-") || l.startsWith("Total")) continue;
+                    if (l.isEmpty() || l.startsWith("Total") || l.startsWith("-")) continue;
 
-                    String[] parts = l.split("\t");
-                    if (parts.length >= 4) {
+                    String[] parts = l.split("\\t");
+                    if (parts.length >= 4 && parts[0].matches("\\d+")) {
                         String amount = parts[1].trim();
                         String source = parts[2].trim();
                         String date = parts[3].trim();
@@ -148,7 +152,6 @@ public class ViewFixedIncome extends JFrame implements ActionListener {
                 br.close();
                 bw.close();
 
-                // Replace old file
                 original.delete();
                 temp.renameTo(original);
 
