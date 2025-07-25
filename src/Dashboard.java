@@ -67,8 +67,13 @@ public class Dashboard extends JFrame implements ActionListener, MouseListener {
         gbc.gridy = 3;
         add(viewExpense, gbc);
 
-        gbc.gridy = 4;
-        add(accounts);
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.SOUTH;
+        gbc.weighty = 1;  // Push it down
+        gbc.fill = GridBagConstraints.NONE;  // Let it center horizontally
+        add(accounts, gbc);
         accounts.addActionListener(this);
 
         // Add MouseListener

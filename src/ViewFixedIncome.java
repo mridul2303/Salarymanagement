@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
 
 public class ViewFixedIncome extends JFrame implements ActionListener {
     JTextArea area = new JTextArea(20, 50);
@@ -118,7 +120,7 @@ public class ViewFixedIncome extends JFrame implements ActionListener {
             }
 
             try {
-                String[] lines = area.getText().split("\\R"); // \R matches all line breaks
+                String[] lines = area.getText().split("\\R");
                 File original = new File("income.txt");
                 File temp = new File("temp_income.txt");
 
@@ -144,6 +146,15 @@ public class ViewFixedIncome extends JFrame implements ActionListener {
                         String amount = parts[1].trim();
                         String source = parts[2].trim();
                         String date = parts[3].trim();
+
+                        // Date validation
+                        if (!isValidDate(date)) {
+                            JOptionPane.showMessageDialog(this, "Invalid date format at line " + (i + 1) + ". Please use yyyy-MM-dd.");
+                            bw.close();
+                            temp.delete();
+                            return;
+                        }
+
                         bw.write("Fixed," + amount + "," + source + "," + date);
                         bw.newLine();
                     }
@@ -166,6 +177,18 @@ public class ViewFixedIncome extends JFrame implements ActionListener {
         if (o == back) {
             new Dashboard();
             dispose();
+        }
+    }
+
+    // Validate date format (strict yyyy-MM-dd)
+    private boolean isValidDate(String dateStr) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            sdf.setLenient(false);
+            sdf.parse(dateStr);
+            return true;
+        } catch (ParseException e) {
+            return false;
         }
     }
 }

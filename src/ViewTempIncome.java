@@ -77,6 +77,7 @@ public class ViewTempIncome extends JFrame implements ActionListener {
                 area.append("----------------------------------------------\n");
                 while ((line = br.readLine()) != null) {
                     String[] parts = line.split(",");
+
                     if (parts.length == 4 && parts[0].trim().equalsIgnoreCase("Temp")) {
                         String amount = parts[1].trim();
                         String source = parts[2].trim();
