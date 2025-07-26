@@ -10,6 +10,8 @@ class Accounts extends JFrame implements ActionListener {
     JTextArea t2 = new JTextArea();  // Will be used for expenses
     JButton back = new JButton("Back");
     JButton load = new JButton("Load");
+    JLabel ab = new JLabel("Available Balance");
+    JTextField balance = new JTextField(15);
 
     Accounts() {
         setTitle("WELCOME TO YOUR ACCOUNTS");
@@ -63,12 +65,16 @@ class Accounts extends JFrame implements ActionListener {
         gbc.anchor = GridBagConstraints.CENTER;
         add(back, gbc);
 
+        add(ab);add(balance);
+
         // Action Listeners
         back.addActionListener(this);
         load.addActionListener(this);
 
         setVisible(true);
     }
+
+
 
     public void actionPerformed(ActionEvent e) {
         Object o = e.getSource();
@@ -78,8 +84,11 @@ class Accounts extends JFrame implements ActionListener {
         } else if (o == load) {
             loadIncomes();
             loadExpense();
+            loadAvailBal();
 
         }
+
+
     }
 
     void loadIncomes() {
@@ -171,4 +180,8 @@ t2.setText("");
         }
 
     }
-}
+    AvailBalance(){
+        float availbalance = 0;
+        
+
+    }}
