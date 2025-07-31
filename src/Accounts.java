@@ -2,10 +2,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 class Accounts extends JFrame implements ActionListener {
+    double inctotal = 0.0;
+    double extotal = 0.0;
+    double availbalance = 0.0;
     JTextArea t1 = new JTextArea();
     JTextArea t2 = new JTextArea();  // Will be used for expenses
     JButton back = new JButton("Back");
@@ -93,7 +98,6 @@ class Accounts extends JFrame implements ActionListener {
 
     void loadIncomes() {
         t1.setText("");
-        double total = 0.0;
 
         LocalDate today = LocalDate.now();
         int currentDay = today.getDayOfMonth();
@@ -117,19 +121,19 @@ class Accounts extends JFrame implements ActionListener {
                         if (incomeDay <= currentDay) {
                             LocalDate adjustedDate = LocalDate.of(currentYear, currentMonth, incomeDay);
                             t1.append(amount + "\t" + adjustedDate + "\n");
-                            total += amount;
+                            inctotal += amount;
                         }
                     } else if (type.equalsIgnoreCase("Temp")) {
                         if (date.getMonthValue() == currentMonth && date.getYear() == currentYear) {
                             t1.append(amount + "\t" + date + "\n");
-                            total += amount;
+                            inctotal += amount;
                         }
                     }
                 }
             }
 
             t1.append("--------------------------\n");
-            t1.append("Total Income: " + total + "\n");
+            t1.append("Total Income: " + inctotal + "\n");
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -137,51 +141,72 @@ class Accounts extends JFrame implements ActionListener {
         }
     }
 
-    void loadExpense(){
-t2.setText("");
-        double total = 0.0;
+    public void loadExpense() {
+        t2.setText(""); // Clear text area
+        extotal = 0.0;
+
+        File file = new File("expense.txt");
+
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (Exception ex) {
+                t2.setText("Error creating file: " + ex.getMessage());
+                return;
+            }
+        }
 
         LocalDate today = LocalDate.now();
         int currentDay = today.getDayOfMonth();
         int currentMonth = today.getMonthValue();
         int currentYear = today.getYear();
 
-        t2.append("Amount\tDate\n");
-        t2.append("--------------------------\n");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
-        try (BufferedReader br = new BufferedReader(new FileReader("expense.txt"))){
-            String line ;
+        t2.append("Amount\tDate\t\tCategory\n");
+        t2.append("-------------------------------------\n");
+
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String line;
+
             while ((line = br.readLine()) != null) {
-                String[] part = line.split(",");
-                String type = part[0].trim();
-                double amount = Double.parseDouble(part[1].trim());
-                LocalDate date = LocalDate.parse(part[3].trim());
-                int expenseDay = date.getDayOfMonth();
-                if (type.equalsIgnoreCase("fixed")){
-                    if (expenseDay <= currentDay) {
-                        LocalDate adjustedDate = LocalDate.of(currentYear, currentMonth, expenseDay);
-                        t2.append(amount + "\t" + adjustedDate + "\n");
-                        total += amount;
-                    }}
-                    else if (type.equalsIgnoreCase("Temp")) {
+                try {
+                    String[] part = line.split(",");
+
+                    if (part.length != 4) {
+                        throw new IllegalArgumentException("Invalid format: " + line);
+                    }
+
+                    String type = part[0].trim();
+                    String category = part[1].trim();
+                    double amount = Double.parseDouble(part[2].trim());
+                    LocalDate date = LocalDate.parse(part[3].trim());
+
+                    if (type.equalsIgnoreCase("Fixed")) {
+                        if (date.getDayOfMonth() <= currentDay) {
+                            LocalDate adjustedDate = LocalDate.of( date.getDayOfMonth(),currentMonth,currentYear);
+                            t2.append(amount + "\t" + adjustedDate.format(formatter)+ "\t" + category + "\n");
+                            extotal += amount;
+                        }
+                    } else if (type.equalsIgnoreCase("Temp")) {
                         if (date.getMonthValue() == currentMonth && date.getYear() == currentYear) {
-                            t2.append(amount + "\t" + date + "\n");
-                            total += amount;
+                            t2.append(amount + "\t" + date.format(formatter) + "\t" + category + "\n");
+                            extotal += amount;
                         }
                     }
+
+                } catch (Exception lineError) {
+                    System.err.println("Skipping invalid line: " + line);
+                }
             }
-            t2.append("--------------------------\n");
-            t2.append("Total expense: " + total + "\n");
 
-        }
-        catch (Exception ex) {
-            ex.printStackTrace();
-            t2.setText("Error reading expense.txt"+  ex.getMessage());
-        }
+            t2.append("\nTotal Expenses = ₹" + extotal);
 
+        } catch (Exception e) {
+            t2.setText("Error reading file: " + e.getMessage());
+        }
     }
-    AvailBalance(){
-        float availbalance = 0;
-        
-
+    void loadAvailBal(){
+        availbalance = inctotal - extotal;
+        balance.setText(String.valueOf(availbalance));
     }}
