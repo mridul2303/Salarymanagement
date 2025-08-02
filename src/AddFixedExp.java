@@ -6,7 +6,7 @@ import java.io.FileWriter;
 public class AddFixedExp extends JFrame implements ActionListener {
     JLabel heading = new JLabel("Add Fixed Expense", JLabel.CENTER);
     JLabel amount = new JLabel("Amount:");
-    JLabel date = new JLabel("Date (DD-MM-YYYY):");
+    JLabel date = new JLabel("Date (YYYY-MM-DD):");
     JLabel expenseHead = new JLabel("Expense Type:");
 
     JTextField a = new JTextField(15);
