@@ -43,36 +43,49 @@ class Accounts extends JFrame implements ActionListener {
         // 1. Load Button
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.gridwidth = 3;
+        gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.fill = GridBagConstraints.NONE;
         add(load, gbc);
 
-        // 2. TextAreas
-        gbc.gridwidth = 1;
+// 2. TextAreas - bigger space
         gbc.gridy = 1;
-        gbc.gridx = 0;
-        gbc.fill = GridBagConstraints.BOTH;
+        gbc.gridwidth = 1;
         gbc.weightx = 1;
         gbc.weighty = 1;
-        add(new JScrollPane(t1), gbc); // For incomes only
+        gbc.fill = GridBagConstraints.BOTH;
+
+        gbc.gridx = 0;
+        add(new JScrollPane(t1), gbc); // Incomes
 
         gbc.gridx = 1;
-        add(new JScrollPane(t2), gbc); // For expenses only (empty for now)
+        add(new JScrollPane(t2), gbc); // Expenses
 
-        // 3. Back Button
-        gbc.gridx = 0;
+// 3. Available Balance label and field at bottom
         gbc.gridy = 2;
-        gbc.gridwidth = 3;
+        gbc.gridx = 0;
+        gbc.gridwidth = 1;
         gbc.weightx = 0;
         gbc.weighty = 0;
         gbc.fill = GridBagConstraints.NONE;
+        gbc.anchor = GridBagConstraints.EAST;
+        add(ab, gbc);
+
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.WEST;
+        add(balance, gbc);
+
+// 4. Back Button at bottom center
+        gbc.gridy = 3;
+        gbc.gridx = 0;
+        gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
         add(back, gbc);
 
-        add(ab);add(balance);
+        t1.setEditable(false);
+        t2.setEditable(false);
+        balance.setEditable(false);
 
-        // Action Listeners
         back.addActionListener(this);
         load.addActionListener(this);
 
@@ -105,34 +118,21 @@ class Accounts extends JFrame implements ActionListener {
         int currentYear = today.getYear();
 
         t1.append("Amount\tDate\n");
-        t1.append("--------------------------\n");
+        t1.append("----------------------------------------------\n");
 
         try (BufferedReader br = new BufferedReader(new FileReader("income.txt"))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
                 if (parts.length == 4) {
-                    String type = parts[0].trim();
-                    double amount = Double.parseDouble(parts[1].trim());
-                    LocalDate date = LocalDate.parse(parts[3].trim());
-                    int incomeDay = date.getDayOfMonth();
-
-                    if (type.equalsIgnoreCase("Fixed")) {
-                        if (incomeDay <= currentDay) {
-                            LocalDate adjustedDate = LocalDate.of(currentYear, currentMonth, incomeDay);
-                            t1.append(amount + "\t" + adjustedDate + "\n");
-                            inctotal += amount;
-                        }
-                    } else if (type.equalsIgnoreCase("Temp")) {
-                        if (date.getMonthValue() == currentMonth && date.getYear() == currentYear) {
-                            t1.append(amount + "\t" + date + "\n");
-                            inctotal += amount;
-                        }
-                    }
+                    double amount = Double.parseDouble(parts[1]);
+                    String type = parts[2];
+                    t1.append(amount + "\t " + type + "\n");
+                    inctotal += amount;
                 }
             }
 
-            t1.append("--------------------------\n");
+            t1.append("--------------------------------------------\n");
             t1.append("Total Income: " + inctotal + "\n");
 
         } catch (Exception ex) {
@@ -151,7 +151,7 @@ class Accounts extends JFrame implements ActionListener {
         int currentYear = today.getYear();
 
         t2.append("Amount\tDate\n");
-        t2.append("--------------------------\n");
+        t2.append("------------------------------------\n");
 
 
         try ( BufferedReader br = new BufferedReader(new FileReader("expense.txt"))){
@@ -159,30 +159,15 @@ class Accounts extends JFrame implements ActionListener {
 String line;
             while((line = br.readLine()) != null){
                 String[] parts = line.split(",");
-                if (parts.length == 4){
-                   String type = parts[0];
-                   double amount = Double.parseDouble(parts[1]);
-                    LocalDate date = LocalDate.parse(parts[3]);
-                    int day = date.getDayOfMonth();
-
-                    if (type.equalsIgnoreCase("Fixed")){
-                        if (day<= currentDay) {
-                            t2.append(amount + "\t" + date + "\n");
-                            extotal += amount;
-                        }} else if (type.equalsIgnoreCase("Temp")) {
-                        if (date.getMonthValue() == currentMonth && date.getYear() == currentYear){
-                            t2.append(amount+ "\t" + date + "\n");
-                            extotal += amount;
-
-                        }
-                    }
-
+                if (parts.length == 4) {
+                    double amount = Double.parseDouble(parts[1]);
+                    String type = parts[2];
+                    extotal += amount;
+                    t2.append(amount + "\t" + type + "\n");
                 }
 
-
-
             }
-            t2.append("--------------------------\n");
+            t2.append("------------------------------------\n");
             t2.append("Total Expense: " + extotal + "\n");
 
         }
